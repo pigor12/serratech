@@ -1,0 +1,20 @@
+@ECHO OFF
+SETLOCAL ENABLEDELAYEDEXPANSION
+SET "URL=%~1"
+SET "FILE=%~2"
+POWERSHELL -Command Import-Module BitsTransfer
+SET "ERR=!ERRORLEVEL!"
+IF !ERR! EQU 0 (
+    POWERSHELL -Command Start-BitsTransfer -Source "%URL%" -Destination "%FILE%"
+    SET "ERR=!ERRORLEVEL!"
+    IF !ERR! EQU 0 (
+        EXIT /B 0
+    ) ELSE GOTO BTA
+) ELSE GOTO BTA
+:BTA
+    BITSADMIN /TRANSFER "GENERIC" /DOWNLOAD /PRIORITY NORMAL "%URL%" "%FILE%"
+    SET "ERR=!ERRORLEVEL!"
+    IF !ERR! EQU 0 (
+        EXIT /B 0
+    ) ELSE EXIT /B 1
+ENDLOCAL
