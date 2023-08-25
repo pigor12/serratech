@@ -7,26 +7,18 @@ REM Data:   11/06/2023
 CLS
 TITLE ServiceDesk - FIEMG
 IF EXIST %SYSTEMROOT%\SYSTEM32\WDI\LOGFILES (
-    ECHO ♠ Permissões administrativas garantidas, prosseguindo.
-    PING CETECMG.local -n 1 >NUL 2>&1
+    ECHO Permissões administrativas garantidas, prosseguindo.
+    PING www.google.com >NUL 2>&1
     IF %ERRORLEVEL% EQU 0 (
-        ECHO ○ Conexão com o CIT disponível, prosseguindo.
-        PING www.google.com -n 1 >NUL 2>&1
-        IF %ERRORLEVEL% EQU 0 (
-            ECHO ◊ Internet disponível, prosseguindo.
-            CALL .\UTIL\MENU.bat
-        ) ELSE (
-            ECHO ☼ Aviso! Conexão com internet indisponível, funcionalidades reduzidas.
-            PAUSE
-            EXIT /B 1
-        )
+        ECHO Internet disponível, prosseguindo.
+        CALL .\UTIL\MENU.bat
     ) ELSE (
-        ECHO ☼ Aviso! Conexão com o CIT indisponível, saindo.
+        ECHO Aviso! Conexão com internet indisponível, funcionalidades reduzidas.
         PAUSE
-        EXIT /B 1
-    )
+        CALL .\UTIL\MENU.bat
+    )   
 ) ELSE (
-    ECHO ► Erro! Permissões insuficientes, saindo.
+    ECHO Erro! Permissões insuficientes, saindo.
     PAUSE
     EXIT /B 1 
 )

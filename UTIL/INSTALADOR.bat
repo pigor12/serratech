@@ -15,11 +15,11 @@ IF EXIST "%ARQUIVO%" (
             EXIT /B 0
         ) ELSE EXIT /B 1
     )  ELSE (
-        ECHO ► Erro! Formato não suportado.
+        ECHO Erro! Formato não suportado.
         EXIT /B 1
     )
 ) ELSE (
-    ECHO ► Erro! Arquivo removido ou alterado.
+    ECHO Erro! Arquivo removido ou alterado.
     EXIT /B 1
 )
 ENDLOCAL
