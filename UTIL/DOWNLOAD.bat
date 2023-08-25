@@ -11,12 +11,12 @@ IF !ERR! EQU 0 (
     IF !ERR! EQU 0 (
         EXIT /B 0
     ) ELSE (
-        ECHO Aviso! Start-BitsTransfer indisponível, tentando com BITSADMIN.
+        ECHO Aviso! Start-BitsTransfer indisponivel, tentando com BITSADMIN.
         GOTO :BTA
     )
 ) ELSE GOTO :BTA
 :BTA
-    BITSADMIN /TRANSFER "GENERIC" /DOWNLOAD /PRIORITY NORMAL "%URL%" "%FILE%" >NUL
+    BITSADMIN /TRANSFER "GENERIC" /DOWNLOAD /PRIORITY NORMAL "%URL%" "%FILE%" >NUL 2>&1
     SET "ERR=!ERRORLEVEL!"
     IF !ERR! EQU 0 (
         EXIT /B 0

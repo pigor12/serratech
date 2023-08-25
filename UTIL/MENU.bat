@@ -1,5 +1,4 @@
 @ECHO OFF
-CHCP 65001 >NUL
 SETLOCAL ENABLEDELAYEDEXPANSION
 IF EXIST ".\UTIL\REDIRECIONAMENTO.bat" (
     CALL :VER_WINDOWS
@@ -8,21 +7,21 @@ IF EXIST ".\UTIL\REDIRECIONAMENTO.bat" (
         GOTO :MENU_PRINCIPAL
     ) ELSE EXIT /B 1
 ) ELSE (
-    ECHO Recursos básicos indisponíveis, gentileza verificar.
+    ECHO Recursos basicos indisponiveis, gentileza verificar.
     PAUSE
     EXIT /B 1
 )
 :MENU_PRINCIPAL
     CLS
     ECHO.
-    ECHO        Softwares disponíveis
+    ECHO        Softwares disponiveis
     ECHO.
     SET /A "CONTADOR-=1"
     FOR /L %%I IN (0,1,%CONTADOR%) DO (
         ECHO        %%I   !NOME_%%I!
     )
     ECHO.
-    SET /P "ESCOLHA=Escolha uma das opções acima e pressione ENTER: "
+    SET /P "ESCOLHA=Escolha uma das opcoes acima e pressione ENTER: "
     CALL .\UTIL\REDIRECIONAMENTO.bat "!SOFTWARE_%ESCOLHA%!" "!URL_%ESCOLHA%!" "!TIPO_%ESCOLHA%!" "!PARAMETROS_%ESCOLHA%!" "!OP_%ESCOLHA%!"
     EXIT /B 0
 :VER_WINDOWS
@@ -40,7 +39,7 @@ IF EXIST ".\UTIL\REDIRECIONAMENTO.bat" (
             SET /A "CONTADOR+=1"
         )
     ) ELSE (
-        ECHO Erro! Banco de dados indisponível, saindo.
+        ECHO Erro! Banco de dados indisponivel, saindo.
         EXIT /B 1
     )
 ENDLOCAL
