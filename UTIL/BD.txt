@@ -1,11 +1,11 @@
-Zoom;ZOOM;https://zoom.us/client/latest/ZoomInstallerFull.msi?archType=x64;MSI
-7-Zip;7ZIP;https://www.7-zip.org/a/7z2301-x64.exe;EXE;/S
-Microsoft Teams;TEAMS;https://teams.microsoft.com/downloads/desktopurl?env=production&plat=windows&arch=x64&managedInstaller=true&download=true;MSI
-Google Earth;EARTH;https://dl.google.com/dl/earth/client/advanced/current/googleearthprowin-7.3.6-x64.exe;EXE;OMAHA=1
-Google Chrome;CHROME;https://dl.google.com/dl/chrome/install/googlechromestandaloneenterprise64.msi;MSI
-Mozilla Firefox;FIREFOX;https://download.mozilla.org/?product=firefox-esr-latest&os=win64&lang=pt-BR;EXE
-Acrobat Reader;ACROBAT;https://ardownload2.adobe.com/pub/adobe/reader/win/AcrobatDC/2300320269/AcroRdrDC2300320269_pt_BR.exe;EXE;/sAll
-Citrix WorkSpace;CITRIX;https://downloadplugins.citrix.com/ReceiverUpdates/Prod/Receiver/Win/CitrixWorkspaceApp23.5.1.83.exe;EXE;/silent
-PDFSam;PDFSAM;https://github.com/torakiki/pdfsam/releases/download/v5.1.3/pdfsam-5.1.3.msi;MSI
-Visual Studio Code;CODE;https://code.visualstudio.com/sha/download?build=stable&os=win32-x64-user;EXE;/silent /mergetasks='!runcode,addcontextmenufiles,addcontextmenufolders,associatewithfiles,addtopath'
-Karpersky;KARPERSKY;10101010;EXE;/s
+Zoom;ZOOM;https://zoom.us/client/latest/ZoomInstallerFull.msi?archType=x64;MSI; ;T
+7-Zip;7ZIP;https://www.7-zip.org/a/7z2301-x64.exe;EXE;/S;T
+Microsoft Teams;TEAMS;https://teams.microsoft.com/downloads/desktopurl?env=production&plat=windows&arch=x64&managedInstaller=true&download=true;MSI; ;T
+Google Earth;EARTH;https://dl.google.com/dl/earth/client/advanced/current/googleearthprowin-7.3.6-x64.exe;EXE;OMAHA=1;T
+Google Chrome;CHROME;https://dl.google.com/dl/chrome/install/googlechromestandaloneenterprise64.msi;MSI; ;T
+Mozilla Firefox;FIREFOX;https://download.mozilla.org/?product=firefox-esr-latest&os=win64&lang=pt-BR;EXE;/S;T
+Acrobat Reader;ACROBAT;https://ardownload2.adobe.com/pub/adobe/reader/win/AcrobatDC/2300320269/AcroRdrDC2300320269_pt_BR.exe;EXE;/sAll;T
+Citrix WorkSpace;CITRIX;https://downloadplugins.citrix.com/ReceiverUpdates/Prod/Receiver/Win/CitrixWorkspaceApp23.5.1.83.exe;EXE;/silent;T
+PDFSam;PDFSAM;https://github.com/torakiki/pdfsam/releases/download/v5.1.3/pdfsam-5.1.3.msi;MSI; ;T
+Visual Studio Code;CODE;https://code.visualstudio.com/sha/download?build=stable&os=win32-x64-user;EXE;/silent /mergetasks='!runcode,addcontextmenufiles,addcontextmenufolders,associatewithfiles,addtopath';T
+Karpersky;KARPERSKY; ;EXE;/s;L

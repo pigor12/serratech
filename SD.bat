@@ -8,7 +8,7 @@ CLS
 TITLE ServiceDesk - FIEMG
 IF EXIST %SYSTEMROOT%\SYSTEM32\WDI\LOGFILES (
     ECHO Permissões administrativas garantidas, prosseguindo.
-    PING www.google.com >NUL 2>&1
+    PING www.microsoft.com >NUL 2>&1
     IF %ERRORLEVEL% EQU 0 (
         ECHO Internet disponível, prosseguindo.
         CALL .\UTIL\MENU.bat

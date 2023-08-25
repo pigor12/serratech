@@ -5,38 +5,39 @@ SET "NOME_SOFTWARE=%~1"
 SET "URL_DOWNLOAD=%~2"
 SET "TIPO=%~3"
 SET "PARAMETROS=%~4"
+SET "OPC=%~5"
 CALL :CONFIGURAR_AMBIENTE
 IF %ERRORLEVEL% EQU 0 (
     ECHO Repositório "%REPO_NOME%" definido.
 ) ELSE (
-    ECHO Erro, nenhum repositório FIEMG disponível.
+    ECHO Aviso! Nenhum repositório disponível.
     PAUSE
 )
-
 ECHO Verificando disponibilidade do software....
-ECHO.
-ECHO Buscando em: "\\%REPO_CAMINHO%\%NOME_SOFTWARE%\%NOME_SOFTWARE%.%TIPO%"
-IF EXIST "%HOMEDRIVE%\%HOMEPATH%\DOWNLOADS\%NOME_SOFTWARE%.%TIPO%" (
+IF EXIST "%HOMEDRIVE%%HOMEPATH%\DOWNLOADS\%NOME_SOFTWARE%.%TIPO%" (
     ECHO Instalador disponível localmente, prosseguindo...
-    SET "LOCAL_INST=%HOMEDRIVE%\%HOMEPATH%\DOWNLOADS\%NOME_SOFTWARE%.%TIPO%"
+    SET "LOCAL_INST=%HOMEDRIVE%%HOMEPATH%\DOWNLOADS\%NOME_SOFTWARE%.%TIPO%"
     GOTO :SOLICITAR_INSTALACAO
 ) ELSE IF EXIST "\\%REPO_CAMINHO%\%NOME_SOFTWARE%\%NOME_SOFTWARE%.%TIPO%" (
-    ECHO Instalador disponível na rede FIEMG, prosseguindo...
+    ECHO Instalador disponível na rede, prosseguindo...
     SET "LOCAL_INST=\\%REPO_CAMINHO%\%NOME_SOFTWARE%\%NOME_SOFTWARE%.%TIPO%"
     GOTO :SOLICITAR_INSTALACAO
 ) ELSE (
-    ECHO Aviso! Instalador indisponível. Baixando arquivos...
-    PAUSE
-    GOTO :SOLICITAR_DOWNLOAD
+    ECHO Aviso! Instalador indisponível localmente.
+    IF "%OPC%" == "T" (
+        ECHO Baixando arquivos, aguarde...
+        GOTO :SOLICITAR_DOWNLOAD
+    ) ELSE (
+        ECHO Erro, este software não é disponibilizado na internet, saindo.
+        EXIT /B 1
+    )
 )
 :SOLICITAR_DOWNLOAD
     IF EXIST ".\UTIL\DOWNLOAD.bat" (
-        CALL .\UTIL\DOWNLOAD.bat "%URL_DOWNLOAD%" "%HOMEDRIVE%\%HOMEPATH%\DOWNLOADS\%NOME_SOFTWARE%.%TIPO%"
+        CALL .\UTIL\DOWNLOAD.bat "%URL_DOWNLOAD%" "%HOMEDRIVE%%HOMEPATH%\DOWNLOADS\%NOME_SOFTWARE%.%TIPO%"
         IF %ERRORLEVEL% EQU 0 (
-            CLS
-            ECHO.
             ECHO Download concluído, instalando software, aguarde...
-            SET "LOCAL_INST=%HOMEDRIVE%\%HOMEPATH%\DOWNLOADS\%NOME_SOFTWARE%.%TIPO%"
+            SET "LOCAL_INST=%HOMEDRIVE%%HOMEPATH%\DOWNLOADS\%NOME_SOFTWARE%.%TIPO%"
             GOTO :SOLICITAR_INSTALACAO
         ) ELSE (
             ECHO Erro no download dos arquivos, saindo.
@@ -51,6 +52,12 @@ IF EXIST "%HOMEDRIVE%\%HOMEPATH%\DOWNLOADS\%NOME_SOFTWARE%.%TIPO%" (
         CALL .\UTIL\INSTALADOR.bat "%LOCAL_INST%" "%TIPO%" "%PARAMETROS%"
         IF %ERRORLEVEL% EQU 0 (
             ECHO Instalação concluída.
+            IF EXIST %LOCAL_INST% (
+                DEL /Q %LOCAL_INST%
+                IF %ERRORLEVEL% EQU 0 (
+                    ECHO Instalador removido com sucesso.
+                ) ELSE ECHO Erro na remoção do arquivo na pasta Downloads.
+            )
             EXIT /B 0
         ) ELSE (
             ECHO Erro na instalação do software, saindo.
@@ -63,7 +70,6 @@ IF EXIST "%HOMEDRIVE%\%HOMEPATH%\DOWNLOADS\%NOME_SOFTWARE%.%TIPO%" (
 :CONFIGURAR_AMBIENTE
     IF EXIST ".\UTIL\REPOS.TXT" (
         FOR /F "TOKENS=1-3 DELIMS=;" %%A IN (.\UTIL\REPOS.TXT) DO (
-            ECHO Testando conexão com %%A...
             PING %%B >NUL 2>&1
             IF !ERRORLEVEL! EQU 0 (
                 SET "REPO_NOME=%%A"

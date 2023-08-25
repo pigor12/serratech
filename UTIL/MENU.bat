@@ -23,19 +23,20 @@ IF EXIST ".\UTIL\REDIRECIONAMENTO.bat" (
     )
     ECHO.
     SET /P "ESCOLHA=Escolha uma das opções acima e pressione ENTER: "
-    CALL .\UTIL\REDIRECIONAMENTO.bat "!SOFTWARE_%ESCOLHA%!" "!URL_%ESCOLHA%!" "!TIPO_%ESCOLHA%!" "!PARAMETROS_%ESCOLHA%!"
+    CALL .\UTIL\REDIRECIONAMENTO.bat "!SOFTWARE_%ESCOLHA%!" "!URL_%ESCOLHA%!" "!TIPO_%ESCOLHA%!" "!PARAMETROS_%ESCOLHA%!" "!OP_%ESCOLHA%!"
     EXIT /B 0
 :VER_WINDOWS
     FOR /F "TOKENS=4-5 DELIMS=. " %%I IN ('VER') DO SET "VERSAO=%%I.%%J"
 :VER_SOFTWARE
     IF EXIST ".\UTIL\BD.TXT" (
         SET "CONTADOR=0"
-        FOR /F "TOKENS=1-5 DELIMS=;" %%A IN (.\UTIL\BD.txt) DO (
+        FOR /F "TOKENS=1-6 DELIMS=;" %%A IN (.\UTIL\BD.txt) DO (
             SET "NOME_!CONTADOR!=%%A"
             SET "SOFTWARE_!CONTADOR!=%%B"
             SET "URL_!CONTADOR!=%%C"
             SET "TIPO_!CONTADOR!=%%D"
             SET "PARAMETROS_!CONTADOR!=%%E"
+            SET "OP_!CONTADOR!=%%F"
             SET /A "CONTADOR+=1"
         )
     ) ELSE (
