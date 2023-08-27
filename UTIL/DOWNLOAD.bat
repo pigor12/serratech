@@ -1,5 +1,8 @@
 @ECHO OFF
 CHCP 65001 >NUL
+REM Autor:  Pedro Igor Martins dos Reis
+REM E-mail: pigor@fiemg.com.br
+REM Data:   11/06/2023
 SETLOCAL ENABLEDELAYEDEXPANSION
 SET "URL=%~1"
 SET "FILE=%~2"
@@ -11,7 +14,7 @@ IF !ERR! EQU 0 (
     IF !ERR! EQU 0 (
         EXIT /B 0
     ) ELSE (
-        ECHO Aviso! Start-BitsTransfer indisponivel, tentando com BITSADMIN.
+        ECHO Aviso! Start-BitsTransfer indisponível, tentando com BITSADMIN.
         GOTO :BTA
     )
 ) ELSE GOTO :BTA

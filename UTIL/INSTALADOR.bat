@@ -1,5 +1,8 @@
 @ECHO OFF
 SETLOCAL
+REM Autor:  Pedro Igor Martins dos Reis
+REM E-mail: pigor@fiemg.com.br
+REM Data:   11/06/2023
 SET "ARQUIVO=%~1"
 SET "TIPO=%~2"
 SET "PARAMETROS=%~3"
@@ -11,12 +14,12 @@ IF EXIST "%ARQUIVO%" (
             EXIT /B 0
         ) ELSE EXIT /B 1
     ) ELSE IF "%TIPO%" == "MSI" (
-        START /WAIT MSIEXEC /I "%ARQUIVO%" /QUIET /QN /NORESTART /LOG "%ARQUIVO%.txt"
+        START /WAIT MSIEXEC /I "%ARQUIVO%" /QUIET /QN /NORESTART
         IF !ERR! EQU 0 (
             EXIT /B 0
         ) ELSE EXIT /B 1
     )  ELSE (
-        ECHO Erro! Formato nao suportado.
+        ECHO Erro! Formato não suportado.
         EXIT /B 1
     )
 ) ELSE (

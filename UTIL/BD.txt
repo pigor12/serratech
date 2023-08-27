@@ -8,8 +8,10 @@ Acrobat Reader;ACROBAT;https://ardownload2.adobe.com/pub/adobe/reader/win/Acroba
 Citrix WorkSpace (x86);CITRIX;https://downloadplugins.citrix.com/ReceiverUpdates/Prod/Receiver/Win/CitrixWorkspaceApp23.5.1.83.exe;EXE;/silent;T
 PDFSam;PDFSAM;https://github.com/torakiki/pdfsam/releases/download/v5.1.3/pdfsam-5.1.3.msi;MSI; ;T
 Visual Studio Code;CODE;https://code.visualstudio.com/sha/download?build=stable&os=win32-x64-user;EXE;/silent /mergetasks='!runcode,addcontextmenufiles,addcontextmenufolders,associatewithfiles,addtopath';T
-Karpersky (x86);KARPERSKY; ;EXE;/s;L
-PHREEQC GUI (x86);PHREEQC;https://water.usgs.gov/water-resources/software/PHREEQC/phreeqci-3.7.3-15968.msi;MSI; ;T
-JRE 8 (x86);JAVA;https://javadl.oracle.com/webapps/download/AutoDL?BundleId=248772_8c876547113c4e4aab3c868e9e0ec572;EXE;/s;T
 JRE 8;JAVA;https://javadl.oracle.com/webapps/download/AutoDL?BundleId=248774_8c876547113c4e4aab3c868e9e0ec572;EXE;/s;T
 Microsoft PowerBI;PBI;https://download.microsoft.com/download/8/8/0/880BCA75-79DD-466A-927D-1ABF1F5454B0/PBIDesktopSetup_x64.exe;EXE;-silent -norestart ACCEPT_EULA=1;T
+Transmission;Transmission;https://github.com/transmission/transmission/releases/download/4.0.3/transmission-4.0.3-x64.msi;MSI; ;T
+Visual C++;VC;https://aka.ms/vs/17/release/vc_redist.x64.exe;EXE;/install /quiet /norestart;T
+Discord (x86);Discord;https://discord.com/api/downloads/distributions/app/installers/latest?channel=stable&platform=win&arch=x86;EXE;-s;T
+Slack;Slack;ms-windows-store://pdp/?ProductId=9WZDNCRDK3WP; ; ;MS
+Whatsapp Desktop;WD;ms-windows-store://pdp/?productid=9NKSQGP7F2NH; ; ;MS
