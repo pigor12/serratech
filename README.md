@@ -2,7 +2,7 @@
 
 **Serratech** Um sistema de instalação automatizada de software inspirado na cultura mineira. Este sistema foi criado para simplificar o processo de instalação de software em computadores, proporcionando uma experiência mais eficiente.
 
-![](https://github.com/pigor12/serratech/gif.gif)
+![](https://github.com/pigor12/serratech/blob/main/GIF.gif)
 
 ## Visão Geral
 
