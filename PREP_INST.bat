@@ -10,7 +10,11 @@ IF NOT EXIST "%USERPROFILE%\ServiceDesk" (
         MKDIR "%USERPROFILE%\ServiceDesk\Util"
         XCOPY /S /Y ".\UTIL\*" "%USERPROFILE%\ServiceDesk\Util\"
         COPY ".\SD.bat" "%USERPROFILE%\ServiceDesk\"
-        COPY ".\ServiceDesk.lnk" "%USERPROFILE%\OneDrive\Área de Trabalho\"
+        IF EXIST "%USERPROFILE%\OneDrive\Área de Trabalho\" (
+            COPY ".\ServiceDesk.lnk" "%USERPROFILE%\OneDrive\Área de Trabalho\"
+        ) ELSE IF EXIST "%USERPROFILE%\Desktop\" (
+            COPY ".\ServiceDesk.lnk" "%USERPROFILE%\Desktop"
+        )
         PAUSE
         EXIT /B 0
     ) ELSE (
