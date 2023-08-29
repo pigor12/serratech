@@ -4,14 +4,13 @@ SETLOCAL ENABLEDELAYEDEXPANSION
 REM Autor:  Pedro Igor Martins dos Reis
 REM E-mail: pigor@fiemg.com.br
 REM Data:   11/06/2023
-IF EXIST "%USERPROFILE%\ServiceDesk\UTIL\REDIRECIONAMENTO.bat" (
-    CALL :VER_WINDOWS
+IF EXIST "\\10.1.1.50\ftp\suporte\SCRIPT\SERRATECH\UTIL\REDIRECIONAMENTO.bat" (
     CALL :VER_SOFTWARE
     IF %ERRORLEVEL% EQU 0 (
         GOTO :MENU_PRINCIPAL
     ) ELSE EXIT /B 1
 ) ELSE (
-    ECHO Recursos básicos indisponíveis, gentileza verificar.
+    POWERSHELL -Command "Write-Host ' >> Erro! Recursos básicos indisponíveis, gentileza verificar.' -ForegroundColor Red"
     PAUSE
     EXIT /B 1
 )
@@ -25,15 +24,20 @@ IF EXIST "%USERPROFILE%\ServiceDesk\UTIL\REDIRECIONAMENTO.bat" (
         ECHO        %%I     !NOME_%%I!
     )
     ECHO.
-    SET /P "ESCOLHA=Escolha uma das opções acima e pressione ENTER: "
-    CALL %USERPROFILE%\ServiceDesk\UTIL\REDIRECIONAMENTO.bat "!SOFTWARE_%ESCOLHA%!" "!URL_%ESCOLHA%!" "!TIPO_%ESCOLHA%!" "!PARAMETROS_%ESCOLHA%!" "!OP_%ESCOLHA%!"
+    SET /P "ESCOLHA=  >> Escolha uma das opções acima e pressione ENTER: "
+    IF DEFINED SOFTWARE_%ESCOLHA% (
+        CALL \\10.1.1.50\ftp\suporte\SCRIPT\SERRATECH\UTIL\REDIRECIONAMENTO.bat "!SOFTWARE_%ESCOLHA%!" "!URL_%ESCOLHA%!" "!TIPO_%ESCOLHA%!" "!PARAMETROS_%ESCOLHA%!" "!OP_%ESCOLHA%!"
+    ) ELSE (
+        POWERSHELL -Command "Write-Host ' >> Erro, opção indisponível.' -ForegroundColor Red"
+        PAUSE
+        GOTO :MENU_PRINCIPAL
+        EXIT /B 1
+    )
     EXIT /B 0
-:VER_WINDOWS
-    FOR /F "TOKENS=4-5 DELIMS=. " %%I IN ('VER') DO SET "VERSAO=%%I.%%J"
 :VER_SOFTWARE
-    IF EXIST "%USERPROFILE%\ServiceDesk\UTIL\BD.TXT" (
+    IF EXIST "\\10.1.1.50\ftp\suporte\SCRIPT\SERRATECH\UTIL\BD.TXT" (
         SET "CONTADOR=0"
-        FOR /F "TOKENS=1-6 DELIMS=;" %%A IN (%USERPROFILE%\ServiceDesk\UTIL\BD.txt) DO (
+        FOR /F "TOKENS=1-6 DELIMS=;" %%A IN (\\10.1.1.50\ftp\suporte\SCRIPT\SERRATECH\UTIL\BD.txt) DO (
             SET "NOME_!CONTADOR!=%%A"
             SET "SOFTWARE_!CONTADOR!=%%B"
             SET "URL_!CONTADOR!=%%C"
@@ -43,7 +47,7 @@ IF EXIST "%USERPROFILE%\ServiceDesk\UTIL\REDIRECIONAMENTO.bat" (
             SET /A "CONTADOR+=1"
         )
     ) ELSE (
-        ECHO Erro! Banco de dados indisponível, saindo.
+        POWERSHELL -Command "Write-Host ' >> Erro! Banco de dados indisponível, saindo.' -ForegroundColor Red"
         EXIT /B 1
     )
 ENDLOCAL

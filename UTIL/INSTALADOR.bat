@@ -19,11 +19,11 @@ IF EXIST "%ARQUIVO%" (
             EXIT /B 0
         ) ELSE EXIT /B 1
     )  ELSE (
-        ECHO Erro! Formato não suportado.
+        POWERSHELL -Command "Write-Host ' >> Erro! Formato não suportado.' -ForegroundColor Red"
         EXIT /B 1
     )
 ) ELSE (
-    ECHO Erro! Arquivo removido ou alterado.
+    POWERSHELL -Command "Write-Host ' >> Erro! Arquivo removido ou alterado.' -ForegroundColor Red"
     EXIT /B 1
 )
 ENDLOCAL
