@@ -1,34 +1,38 @@
-@ECHO OFF
-REM Autor:  Pedro Igor Martins dos Reis
+@ECHO OFF >NUL
+REM Author:  Pedro Igor Martins dos Reis
 REM E-mail: pigor@fiemg.com.br
-REM Data:   11/06/2023
-CHCP 65001 >NUL
+REM Date:   11/06/2023
 SETLOCAL
 CLS
 TITLE HelpDesk - CIT
-POWERSHELL -Command "Write-Host ' >> Verificando permissão de administrador.' -ForegroundColor Cyan"
+ECHO Checking administrator permissions.
 IF EXIST %SYSTEMROOT%\SYSTEM32\WDI\LOGFILES (
-    POWERSHELL -Command "Write-Host ' >> Permissões administrativas garantidas, prosseguindo.' -ForegroundColor Green"
-    POWERSHELL -Command "Write-Host ' >> Verificando conexão com a internet.' -ForegroundColor Cyan"
+    ECHO Administrative permissions granted, proceeding.  
+    ECHO Checking internet connection.
+    PAUSE
     PING www.microsoft.com >NUL 2>&1
     IF %ERRORLEVEL% EQU 0 (
-        POWERSHELL -Command "Write-Host ' >> Internet disponível, prosseguindo.' -ForegroundColor Green"
+        ECHO Internet available, proceeding.  
         GOTO :MENU
     ) ELSE (
-        POWERSHELL -Command "Write-Host ' >> Aviso, conexão com internet indisponível, funcionalidades reduzidas.' -ForegroundColor Yellow"
+        ECHO Warning, internet connection unavailable, reduced functionalities.
         PAUSE
         GOTO :MENU
     )
 ) ELSE (
-    POWERSHELL -Command "Write-Host ' >> Erro! Permissões insuficientes, saindo.' -ForegroundColor Red"
+    ECHO Error! Insufficient permissions, exiting.
     PAUSE
     EXIT /B 1 
 )
 :MENU
     IF EXIST "\\10.1.1.50\ftp\suporte\SCRIPT\SERRATECH\Util\Menu.bat" (
         CALL "\\10.1.1.50\ftp\suporte\SCRIPT\SERRATECH\Util\Menu.bat"
+        IF %ERRORLEVEL% NEQ 0 (
+            ECHO Error! Failed to execute the script.
+            PAUSE
+        )
     ) ELSE (
-        POWERSHELL -Command "Write-Host ' >> Erro! Arquivos necessários indisponíveis, gentileza verificar.' -ForegroundColor Red"
+        ECHO Error! Required files unavailable, please check.
         PAUSE
         EXIT /B 1
     )

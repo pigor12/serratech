@@ -1,117 +1,146 @@
 @ECHO OFF
-REM Autor:  Pedro Igor Martins dos Reis
+REM Author:  Pedro Igor Martins dos Reis
 REM E-mail: pigor@fiemg.com.br
-REM Data:   11/06/2023
+REM Date:   11/06/2023
 SETLOCAL ENABLEDELAYEDEXPANSION
-SET "NOME_SOFTWARE=%~1"
-SET "URL_DOWNLOAD=%~2"
-SET "TIPO=%~3"
-SET "PARAMETROS=%~4"
-SET "OPC=%~5"
-IF "%OPC%" NEQ "MS" (
-    POWERSHELL -Command "Write-Host ' >> Verificando disponibilidade do software.' -ForegroundColor Cyan" 
-    IF EXIST "%HOMEDRIVE%\TEMP\%NOME_SOFTWARE%.%TIPO%" (
-        POWERSHELL -Command "Write-Host ' >> Instalador encontrado na pasta TEMP, prosseguindo.' -ForegroundColor Green"
-        SET "LOCAL_INST=%HOMEDRIVE%\TEMP\%NOME_SOFTWARE%.%TIPO%"
-        GOTO :SOLICITAR_INSTALACAO
+SET "SOFTWARE_NAME=%~1"
+SET "DOWNLOAD_URL=%~2"
+SET "TYPE=%~3"
+SET "PARAMETERS=%~4"
+SET "OPTION=%~5"
+IF "%OPTION%" NEQ "MS" (
+    ECHO Checking software availability.  
+    IF EXIST "%HOMEDRIVE%\TEMP\%SOFTWARE_NAME%.%TYPE%" (
+        ECHO Installer found in TEMP folder, proceeding.  
+        SET "INSTALL_LOCATION=%HOMEDRIVE%\TEMP\%SOFTWARE_NAME%.%TYPE%"
+        GOTO :REQUEST_INSTALLATION
     ) ELSE (
-        CALL :CONFIGURAR_AMBIENTE
+        CALL :SETUP_ENVIRONMENT
         IF !ERRORLEVEL! EQU 0 (
-            POWERSHELL -Command "Write-Host ' >> Servidor !REPO_HOSTNAME! encontrado.' -ForegroundColor Cyan"
-            IF EXIST "\\!REPO_CAMINHO!\%NOME_SOFTWARE%\%NOME_SOFTWARE%.%TIPO%" (
-                POWERSHELL -Command "Write-Host ' >> Instalador disponível na rede !REPO_NOME!.' -ForegroundColor Green"
-                SET "LOCAL_INST=\\!REPO_CAMINHO!\%NOME_SOFTWARE%\%NOME_SOFTWARE%.%TIPO%"
-                GOTO :SOLICITAR_INSTALACAO
+            ECHO Network "!REPO_NAME!" found.  
+            IF EXIST "\\!REPO_PATH!\%SOFTWARE_NAME%\%SOFTWARE_NAME%.%TYPE%" (
+                ECHO Installer available on network !REPO_NAME!, proceeding.  
+                SET "INSTALL_LOCATION=\\!REPO_PATH!\%SOFTWARE_NAME%\%SOFTWARE_NAME%.%TYPE%"
+                GOTO :REQUEST_INSTALLATION
             ) ELSE (
-                POWERSHELL -Command "Write-Host ' >> Aviso, Instalador indisponível na rede !REPO_NOME!' -ForegroundColor Yellow"
-                IF "%OPC%" == "T" (
-                    GOTO :SOLICITAR_DOWNLOAD
+                ECHO Warning, Installer unavailable on network !REPO_NAME!
+                IF "%OPTION%" == "T" (
+                    GOTO :REQUEST_DOWNLOAD
                 ) ELSE (
-                    POWERSHELL -Command "Write-Host ' >> Erro, este software não é disponibilizado na internet, saindo.' -ForegroundColor Red"
+                    ECHO Error, this software is not available online, exiting.  
                     PAUSE
                     EXIT /B 1
                 )
             )
         ) ELSE (
-            POWERSHELL -Command "Write-Host ' >> Nenhum servidor encontrado.' -ForegroundColor Yellow" 
+            ECHO No server found.
         )
     )
 ) ELSE (
-    CALL :VER_WINDOWS
-    IF "%VERSAO%" == "10.0" (
-        POWERSHELL -Command "Write-Host ' >> Software disponível na Microsoft Store.' -ForegroundColor Cyan"
-        START /W %URL_DOWNLOAD%
+    CALL :CHECK_WINDOWS
+    IF "%VERSION%" == "10.0" (
+        ECHO Software available on Microsoft Store.
+        START /W %DOWNLOAD_URL%
         PAUSE
         EXIT /B 0
     ) ELSE (
-        POWERSHELL -Command "Write-Host ' >> Microsoft Store não está disponível no Windows 7 e 8.1' -ForegroundColor Red"
+        ECHO Microsoft Store is not available on Windows 7 and 8.1
         PAUSE
         EXIT /B 1
     )
 )
-:SOLICITAR_DOWNLOAD
+:REQUEST_DOWNLOAD
     IF EXIST "\\10.1.1.50\ftp\suporte\SCRIPT\SERRATECH\UTIL\DOWNLOAD.bat" (
         IF NOT EXIST "%HOMEDRIVE%\TEMP" (
             MKDIR "%HOMEDRIVE%\TEMP"
         )
-        POWERSHELL -Command "Write-Host ' >> Realizando download, aguarde...' -ForegroundColor Cyan"
-        CALL \\10.1.1.50\ftp\suporte\SCRIPT\SERRATECH\UTIL\DOWNLOAD.bat "%URL_DOWNLOAD%" "%HOMEDRIVE%\TEMP\%NOME_SOFTWARE%.%TIPO%"
+        ECHO Downloading, please wait...  
+        CALL \\10.1.1.50\ftp\suporte\SCRIPT\SERRATECH\UTIL\DOWNLOAD.bat "%DOWNLOAD_URL%" "%HOMEDRIVE%\TEMP\%SOFTWARE_NAME%.%TYPE%"
         IF !ERRORLEVEL! EQU 0 (
-            POWERSHELL -Command "Write-Host ' >> Download concluído, instalando software, aguarde...' -ForegroundColor Green"
-            SET "LOCAL_INST=%HOMEDRIVE%\TEMP\%NOME_SOFTWARE%.%TIPO%"
-            GOTO :SOLICITAR_INSTALACAO
+            ECHO Download completed, installing software, please wait...  
+            SET "INSTALL_LOCATION=%HOMEDRIVE%\TEMP\%SOFTWARE_NAME%.%TYPE%"
+            GOTO :REQUEST_INSTALLATION
         ) ELSE (
-            POWERSHELL -Command "Write-Host ' >> Erro! Não foi possível completar a transferência, saindo.' -ForegroundColor Red"
+            ECHO Error! Could not complete the transfer, exiting.  
             PAUSE
             EXIT /B 1
         )
     ) ELSE (
-        POWERSHELL -Command "Write-Host ' >> Erro! script de download indisponível.' -ForegroundColor Red"
+        ECHO Error! Download script unavailable.
         PAUSE
         EXIT /B 1
     )
-:SOLICITAR_INSTALACAO
+:REQUEST_INSTALLATION
     IF EXIST "\\10.1.1.50\ftp\suporte\SCRIPT\SERRATECH\UTIL\INSTALADOR.bat" (
-        CALL \\10.1.1.50\ftp\suporte\SCRIPT\SERRATECH\UTIL\INSTALADOR.bat "%LOCAL_INST%" "%TIPO%" "%PARAMETROS%"
+        CALL \\10.1.1.50\ftp\suporte\SCRIPT\SERRATECH\UTIL\INSTALADOR.bat "%INSTALL_LOCATION%" "%TYPE%" "%PARAMETERS%"
         IF !ERRORLEVEL! EQU 0 (
-            POWERSHELL -Command "Write-Host ' >> Instalação concluída.' -ForegroundColor Green"
-            IF EXIST %LOCAL_INST% (
-                DEL /Q %LOCAL_INST%
+            ECHO Installation completed.  
+            IF EXIST "%HOMEDRIVE%\TEMP\%SOFTWARE_NAME%.%TYPE%" (
+                DEL /Q "%HOMEDRIVE%\TEMP\%SOFTWARE_NAME%.%TYPE%"
                 IF !ERRORLEVEL! EQU 0 (
-                    POWERSHELL -Command "Write-Host ' >> Instalador removido com sucesso.' -ForegroundColor Green"
+                    ECHO Installer successfully removed.
+                    PAUSE
                 ) ELSE (
-                    POWERSHELL -Command "Write-Host ' >> Erro! Não foi possível remover o instalador.' -ForegroundColor Red"
+                    ECHO Error! Could not remove the installer.
+                    PAUSE
                 )
             )
-            PAUSE
-            EXIT /B 0
+            CALL :GENERATE_LOG
+            IF !ERRORLEVEL! EQU 0 (
+                ECHO LOG successfully generated.
+                PAUSE
+                EXIT /B 0
+            ) ELSE (
+                ECHO ERROR! LOG could not be generated.
+                PAUSE
+                EXIT /B 1
+            )
         ) ELSE (
-            POWERSHELL -Command "Write-Host ' >> Erro! Não foi possível instalar o software, saindo.' -ForegroundColor Red"
+            ECHO Error! Could not install the software, exiting.  
             PAUSE
             EXIT /B 1
         )
     ) ELSE (
-        POWERSHELL -Command "Write-Host ' >> Erro! Script de instalação indisponível.' -ForegroundColor Red"
+        ECHO Error! Installation script unavailable.  
         PAUSE
         EXIT /B 1
     )
-:CONFIGURAR_AMBIENTE
+:SETUP_ENVIRONMENT
     IF EXIST "\\10.1.1.50\ftp\suporte\SCRIPT\SERRATECH\UTIL\REPOS.TXT" (
         FOR /F "TOKENS=1-3 DELIMS=;" %%A IN (\\10.1.1.50\ftp\suporte\SCRIPT\SERRATECH\UTIL\REPOS.TXT) DO (
             PING %%B >NUL 2>&1
             IF !ERRORLEVEL! EQU 0 (
-                SET "REPO_NOME=%%A"
+                SET "REPO_NAME=%%A"
                 SET "REPO_HOSTNAME=%%B"
-                SET "REPO_CAMINHO=%%C"
+                SET "REPO_PATH=%%C"
                 EXIT /B 0
             )
         )
         EXIT /B 1
     ) ELSE (
-        POWERSHELL -Command "Write-Host ' >> Erro! Arquivo de repositórios indisponível, saindo.' -ForegroundColor Red"
+        ECHO Error! Repositories file unavailable, exiting.  
         PAUSE
         EXIT /B 1
     )
-:VER_WINDOWS
-    FOR /F "TOKENS=4-5 DELIMS=. " %%I IN ('VER') DO SET "VERSAO=%%I.%%J"
+:CHECK_WINDOWS
+    FOR /F "TOKENS=4-5 DELIMS=. " %%I IN ('VER') DO SET "VERSION=%%I.%%J"
+:GENERATE_LOG
+    IF NOT EXIST "\\10.1.1.50\ftp\suporte\SCRIPT\SERRATECH\LOGS" (
+        ECHO Creating LOGS folder on network "%REPO_NAME%".  
+        MKDIR "\\10.1.1.50\ftp\suporte\SCRIPT\SERRATECH\LOGS"
+        IF !ERRORLEVEL! NEQ 0 (
+            ECHO Error! Could not create LOGS folder.  
+            EXIT /B 1
+        ) ELSE ECHO Folder successfully created.  
+    ) ELSE ECHO LOGS folder already exists.
+    ECHO Generating logs file.
+    FOR /F "TOKENS=2 DELIMS==" %%I IN ('WMIC OS GET LOCALDATETIME /VALUE') DO SET "DATETIME=%%I"
+    SET "LOGFILE=\\10.1.1.50\ftp\suporte\SCRIPT\SERRATECH\LOGS\install_%DATETIME:~0,14%.log"
+    ECHO ============================= > "%LOGFILE%"
+    ECHO Software: %SOFTWARE_NAME% >> "%LOGFILE%"
+    ECHO Date: %DATE% >> "%LOGFILE%"
+    ECHO Time: %TIME% >> "%LOGFILE%"
+    ECHO User: %USERNAME% >> "%LOGFILE%"
+    ECHO Computer name: %COMPUTERNAME% >> "%LOGFILE%"
+    EXIT /B 0
 ENDLOCAL

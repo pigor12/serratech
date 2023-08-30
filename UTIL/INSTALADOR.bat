@@ -1,29 +1,29 @@
 @ECHO OFF
 SETLOCAL
-REM Autor:  Pedro Igor Martins dos Reis
+REM Author:  Pedro Igor Martins dos Reis
 REM E-mail: pigor@fiemg.com.br
-REM Data:   11/06/2023
-SET "ARQUIVO=%~1"
-SET "TIPO=%~2"
-SET "PARAMETROS=%~3"
+REM Date:   11/06/2023
+SET "FILE=%~1"
+SET "TYPE=%~2"
+SET "PARAMETERS=%~3"
 SET "ERR=!ERRORLEVEL!"
-IF EXIST "%ARQUIVO%" (
-    IF "%TIPO%" == "EXE" (
-        START /WAIT %ARQUIVO% %PARAMETROS%
+IF EXIST "%FILE%" (
+    IF "%TYPE%" == "EXE" (
+        START /WAIT %FILE% %PARAMETERS%
         IF !ERR! EQU 0 (
             EXIT /B 0
         ) ELSE EXIT /B 1
-    ) ELSE IF "%TIPO%" == "MSI" (
-        START /WAIT MSIEXEC /I "%ARQUIVO%" /QUIET /QN /NORESTART
+    ) ELSE IF "%TYPE%" == "MSI" (
+        START /WAIT MSIEXEC /I "%FILE%" /QUIET /QN /NORESTART
         IF !ERR! EQU 0 (
             EXIT /B 0
         ) ELSE EXIT /B 1
     )  ELSE (
-        POWERSHELL -Command "Write-Host ' >> Erro! Formato não suportado.' -ForegroundColor Red"
+        ECHO Error! Unsupported format. 
         EXIT /B 1
     )
 ) ELSE (
-    POWERSHELL -Command "Write-Host ' >> Erro! Arquivo removido ou alterado.' -ForegroundColor Red"
+    ECHO Error! File removed or changed. 
     EXIT /B 1
 )
 ENDLOCAL
