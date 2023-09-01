@@ -18,6 +18,10 @@ O **SerraTech** automatiza o processo de instalação de software por meio de sc
 - Extensível para qualquer empresa ou necessidade da equipe de TI.
 - Leve, não ocupa mais de 2mb de disco.
 
+<p align="center">
+  <img src="https://raw.githubusercontent.com/pigor12/serratech/main/OSs.png"/>
+</p>
+
 ## Pré-requisitos
 
 Antes de utilizar o SerraTech, certifique-se de:
