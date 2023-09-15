@@ -18,7 +18,6 @@ IF EXIST "\\10.1.1.50\FTP\SUPORTE\SCRIPT\SERRATECH\UTIL\REDIRECIONAMENTO.bat" (
     ECHO.
     ECHO      %COUNTER% software available
     ECHO.
-    SET /A "COUNTER-=1"
     FOR /L %%I IN (0,1,%COUNTER%) DO (
         ECHO        %%I     !NAME_%%I!
     )
@@ -45,6 +44,7 @@ IF EXIST "\\10.1.1.50\FTP\SUPORTE\SCRIPT\SERRATECH\UTIL\REDIRECIONAMENTO.bat" (
             SET "OP_!COUNTER!=%%F"
             SET /A "COUNTER+=1"
         )
+        SET /A "COUNTER-=1"
     ) ELSE (
         ECHO Error! Database unavailable, exiting. 
         EXIT /B 1

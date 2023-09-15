@@ -8,6 +8,7 @@ SET "DOWNLOAD_URL=%~2"
 SET "TYPE=%~3"
 SET "PARAMETERS=%~4"
 SET "OPTION=%~5"
+CLS
 IF "%OPTION%" NEQ "MS" (
     ECHO Checking software availability.  
     IF EXIST "%HOMEDRIVE%\TEMP\%SOFTWARE_NAME%.%TYPE%" (
@@ -17,37 +18,51 @@ IF "%OPTION%" NEQ "MS" (
     ) ELSE (
         CALL :SETUP_ENVIRONMENT
         IF !ERRORLEVEL! EQU 0 (
-            ECHO Network "!REPO_NAME!" found.  
+            ECHO Network "!REPO_NAME!" found.
             IF EXIST "\\!REPO_PATH!\%SOFTWARE_NAME%\%SOFTWARE_NAME%.%TYPE%" (
-                ECHO Installer available on network !REPO_NAME!, proceeding.  
+                ECHO Installer available on network !REPO_NAME!, proceeding.
                 SET "INSTALL_LOCATION=\\!REPO_PATH!\%SOFTWARE_NAME%\%SOFTWARE_NAME%.%TYPE%"
                 GOTO :REQUEST_INSTALLATION
             ) ELSE (
                 ECHO Warning, Installer unavailable on network !REPO_NAME!
                 IF "%OPTION%" == "T" (
                     GOTO :REQUEST_DOWNLOAD
-                ) ELSE (
+                ) ELSE IF "%OPTION%" == "L" (
                     ECHO Error, this software is not available online, exiting.  
                     PAUSE
-                    EXIT /B 1
+                    GOTO :RESTART
+                ) ELSE (
+                    ECHO Error, option unknow..
+                    PAUSE
+                    GOTO :RESTART
                 )
             )
         ) ELSE (
             ECHO No server found.
+            IF "%OPTION%" == "T" (
+                GOTO :REQUEST_DOWNLOAD
+            ) ELSE IF "%OPTION%" == "L" (
+                ECHO Error, this software is not available online, exiting.  
+                GOTO :RESTART
+            ) ELSE (
+                ECHO Error, option unknow..
+                PAUSE
+                GOTO :RESTART
+            )
         )
     )
 ) ELSE (
     CALL :CHECK_WINDOWS
-    IF "%VERSION%" == "10.0" (
+    IF "!VERSION!" == "10.0" (
         ECHO Software available on Microsoft Store.
         START /W %DOWNLOAD_URL%
+        CALL :GENERATE_LOG
         PAUSE
-        EXIT /B 0
     ) ELSE (
         ECHO Microsoft Store is not available on Windows 7 and 8.1
         PAUSE
-        EXIT /B 1
     )
+    GOTO :RESTART
 )
 :REQUEST_DOWNLOAD
     IF EXIST "\\10.1.1.50\ftp\suporte\SCRIPT\SERRATECH\UTIL\DOWNLOAD.bat" (
@@ -79,7 +94,6 @@ IF "%OPTION%" NEQ "MS" (
                 DEL /Q "%HOMEDRIVE%\TEMP\%SOFTWARE_NAME%.%TYPE%"
                 IF !ERRORLEVEL! EQU 0 (
                     ECHO Installer successfully removed.
-                    PAUSE
                 ) ELSE (
                     ECHO Error! Could not remove the installer.
                     PAUSE
@@ -88,13 +102,11 @@ IF "%OPTION%" NEQ "MS" (
             CALL :GENERATE_LOG
             IF !ERRORLEVEL! EQU 0 (
                 ECHO LOG successfully generated.
-                PAUSE
-                EXIT /B 0
             ) ELSE (
                 ECHO ERROR! LOG could not be generated.
                 PAUSE
-                EXIT /B 1
             )
+            GOTO :RESTART
         ) ELSE (
             ECHO Error! Could not install the software, exiting.  
             PAUSE
@@ -124,6 +136,7 @@ IF "%OPTION%" NEQ "MS" (
     )
 :CHECK_WINDOWS
     FOR /F "TOKENS=4-5 DELIMS=. " %%I IN ('VER') DO SET "VERSION=%%I.%%J"
+    EXIT /B 0
 :GENERATE_LOG
     IF NOT EXIST "\\10.1.1.50\ftp\suporte\SCRIPT\SERRATECH\LOGS" (
         ECHO Creating LOGS folder on network "%REPO_NAME%".  
@@ -143,4 +156,11 @@ IF "%OPTION%" NEQ "MS" (
     ECHO User: %USERNAME% >> "%LOGFILE%"
     ECHO Computer name: %COMPUTERNAME% >> "%LOGFILE%"
     EXIT /B 0
+:RESTART
+    CHOICE /C SN /M ">> Do you want to install any more software? "
+    IF ERRORLEVEL 2 (
+        EXIT /B 0
+    ) ELSE IF ERRORLEVEL 1 (
+        CALL "\\10.1.1.50\ftp\suporte\SCRIPT\SERRATECH\Util\Menu.bat"
+    )
 ENDLOCAL

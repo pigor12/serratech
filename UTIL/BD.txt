@@ -13,5 +13,7 @@ Microsoft PowerBI;PBI;https://download.microsoft.com/download/8/8/0/880BCA75-79D
 Transmission;Transmission;https://github.com/transmission/transmission/releases/download/4.0.3/transmission-4.0.3-x64.msi;MSI; ;T
 Visual C++;VC;https://aka.ms/vs/17/release/vc_redist.x64.exe;EXE;/install /quiet /norestart;T
 Discord (x86);Discord;https://discord.com/api/downloads/distributions/app/installers/latest?channel=stable&platform=win&arch=x86;EXE;-s;T
-Slack;Slack;ms-windows-store://pdp/?ProductId=9WZDNCRDK3WP; ; ;MS
+Kaspersky;KASPERSKY; ;EXE;/S;L
+Slack;SLACK;ms-windows-store://pdp/?ProductId=9WZDNCRDK3WP; ; ;MS
 Whatsapp Desktop;WD;ms-windows-store://pdp/?productid=9NKSQGP7F2NH; ; ;MS
+Dialux;DIALUX;https://www.dialux.com/en-GB/download/dialux-evo;EXE;/s;T
