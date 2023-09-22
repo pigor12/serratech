@@ -12,8 +12,7 @@ JRE 8;JAVA;https://javadl.oracle.com/webapps/download/AutoDL?BundleId=248774_8c8
 Microsoft PowerBI;PBI;https://download.microsoft.com/download/8/8/0/880BCA75-79DD-466A-927D-1ABF1F5454B0/PBIDesktopSetup_x64.exe;EXE;-silent -norestart ACCEPT_EULA=1;T
 Transmission;Transmission;https://github.com/transmission/transmission/releases/download/4.0.3/transmission-4.0.3-x64.msi;MSI; ;T
 Visual C++;VC;https://aka.ms/vs/17/release/vc_redist.x64.exe;EXE;/install /quiet /norestart;T
-Discord (x86);Discord;https://discord.com/api/downloads/distributions/app/installers/latest?channel=stable&platform=win&arch=x86;EXE;-s;T
 Kaspersky;KASPERSKY; ;EXE;/S;L
-Slack;SLACK;ms-windows-store://pdp/?ProductId=9WZDNCRDK3WP; ; ;MS
+OBS Studio;OBS;https://cdn-fastly.obsproject.com/downloads/OBS-Studio-29.1.3-Full-Installer-x64.exe;EXE;/S;T
 Whatsapp Desktop;WD;ms-windows-store://pdp/?productid=9NKSQGP7F2NH; ; ;MS
 Dialux;DIALUX;https://www.dialux.com/en-GB/download/dialux-evo;EXE;/s;T

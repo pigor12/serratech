@@ -19,11 +19,13 @@ IF EXIST "%FILE%" (
             EXIT /B 0
         ) ELSE EXIT /B 1
     )  ELSE (
-        ECHO Error! Unsupported format. 
+        ECHO XX Error, Unsupported format.
+        PAUSE
         EXIT /B 1
     )
 ) ELSE (
-    ECHO Error! File removed or changed. 
+    ECHO XX Error, File removed or changed.
+    PAUSE
     EXIT /B 1
 )
 ENDLOCAL

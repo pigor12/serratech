@@ -3,13 +3,14 @@ SETLOCAL ENABLEDELAYEDEXPANSION
 REM Author:  Pedro Igor Martins dos Reis
 REM E-mail: pigor@fiemg.com.br
 REM Date:   11/06/2023
-IF EXIST "\\10.1.1.50\FTP\SUPORTE\SCRIPT\SERRATECH\UTIL\REDIRECIONAMENTO.bat" (
+SET "SCRIPT_PATH=%~DP0"
+IF EXIST "%SCRIPT_PATH%REDIRECIONAMENTO.bat" (
     CALL :CHECK_SOFTWARE
     IF %ERRORLEVEL% EQU 0 (
         GOTO :MAIN_MENU
     ) ELSE EXIT /B 1
 ) ELSE (
-    ECHO Error! Basic resources unavailable, please check.
+    ECHO XX Error,  Basic resources unavailable, please check.
     PAUSE
     EXIT /B 1
 )
@@ -18,24 +19,50 @@ IF EXIST "\\10.1.1.50\FTP\SUPORTE\SCRIPT\SERRATECH\UTIL\REDIRECIONAMENTO.bat" (
     ECHO.
     ECHO      %COUNTER% software available
     ECHO.
-    FOR /L %%I IN (0,1,%COUNTER%) DO (
+    FOR /L %%I IN (1,1,%COUNTER%) DO (
         ECHO        %%I     !NAME_%%I!
     )
     ECHO.
-    SET /P "CHOICE=>> Choose one of the options above and press ENTER: "
-    IF DEFINED SOFTWARE_%CHOICE% (
-        CALL \\10.1.1.50\ftp\suporte\SCRIPT\SERRATECH\UTIL\REDIRECIONAMENTO.bat "!SOFTWARE_%CHOICE%!" "!URL_%CHOICE%!" "!TYPE_%CHOICE%!" "!PARAMETERS_%CHOICE%!" "!OP_%CHOICE%!"
-    ) ELSE (
-        ECHO Error, unavailable option. 
+    ECHO ^>^> Type all your selections separated by spaces or just F to exit. Example: 1 2 3
+    ECHO.
+    SET /P "CHOICES=>> Enter your choices: "
+    SET "SELECTION_LIST="
+    FOR /L %%N IN (1,1,%COUNTER%) DO SET "SELECTED_%%N=NO"
+    FOR %%A IN (%CHOICES%) DO (
+        IF /I "%%A"=="F" (
+            ECHO You decided to exit. Goodbye!
+            PAUSE
+            EXIT /B 0
+        ) ELSE IF DEFINED SOFTWARE_%%A (
+            IF "!SELECTED_%%A!"=="YES" (
+                ECHO Warning, you've already selected software %%A.
+                PAUSE
+                GOTO :MAIN_MENU
+            ) ELSE (
+                SET "SELECTION_LIST=!SELECTION_LIST! %%A"
+                SET "SELECTED_%%A=YES"
+            )
+        ) ELSE (
+            ECHO Error, %%A is an unavailable option. 
+            PAUSE
+            GOTO :MAIN_MENU
+        )
+    )
+    IF NOT DEFINED SELECTION_LIST (
+        ECHO No valid selections made.
         PAUSE
         GOTO :MAIN_MENU
-        EXIT /B 1
+    )
+    GOTO :INSTALL_SELECTIONS
+:INSTALL_SELECTIONS
+    FOR %%A IN (%SELECTION_LIST%) DO (
+        CALL %SCRIPT_PATH%REDIRECIONAMENTO.bat "!SOFTWARE_%%A!" "!URL_%%A!" "!TYPE_%%A!" "!PARAMETERS_%%A!" "!OP_%%A!"
     )
     EXIT /B 0
 :CHECK_SOFTWARE
-    IF EXIST "\\10.1.1.50\ftp\suporte\SCRIPT\SERRATECH\UTIL\BD.TXT" (
-        SET "COUNTER=0"
-        FOR /F "TOKENS=1-6 DELIMS=;" %%A IN (\\10.1.1.50\ftp\suporte\SCRIPT\SERRATECH\UTIL\BD.txt) DO (
+    IF EXIST "%SCRIPT_PATH%BD.TXT" (
+        SET "COUNTER=1"
+        FOR /F "TOKENS=1-6 DELIMS=;" %%A IN (%SCRIPT_PATH%BD.txt) DO (
             SET "NAME_!COUNTER!=%%A"
             SET "SOFTWARE_!COUNTER!=%%B"
             SET "URL_!COUNTER!=%%C"
@@ -46,7 +73,8 @@ IF EXIST "\\10.1.1.50\FTP\SUPORTE\SCRIPT\SERRATECH\UTIL\REDIRECIONAMENTO.bat" (
         )
         SET /A "COUNTER-=1"
     ) ELSE (
-        ECHO Error! Database unavailable, exiting. 
+        ECHO XX Error, Database unavailable, exiting. 
+        PAUSE
         EXIT /B 1
     )
 ENDLOCAL
